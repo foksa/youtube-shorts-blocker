@@ -1,6 +1,6 @@
 # Icon source
 
-Generated with the built-in ImageGen tool using the user-provided Shorts logo reference. `source.png` is the original; `icon-16.png`, `icon-32.png`, `icon-48.png`, and `icon-128.png` are resized distribution assets used by the manifest.
+Generated with the built-in ImageGen tool using the user-provided Shorts logo reference. `icon-source.png` is the original; the resized distribution assets used by the manifest live in [`extension/icons/`](../../extension/icons/).
 
 ## Generation prompt
 

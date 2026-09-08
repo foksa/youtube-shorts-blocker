@@ -8,8 +8,10 @@ No runtime dependencies, accounts, telemetry, or network requests. The extension
 
 1. Download or clone this repository and extract it if needed.
 2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select the repository folder containing `manifest.json`.
+3. Click **Load unpacked** and select the `extension/` folder inside the repository.
 4. Refresh existing YouTube tabs.
+
+If you previously loaded the repository root, remove that unpacked installation and load `extension/` instead. Chrome may assign a new extension ID, so check your redirect preference afterward.
 
 After changing extension files, reload the extension on `chrome://extensions` and refresh YouTube.
 
@@ -33,6 +35,24 @@ Text-only control detection recognizes the exact English label “Shorts”; aut
 
 This hides Shorts UI and redirects Shorts routes. It does not classify video duration, block media downloads, or block the same video on a regular `/watch` URL. Matching the mobile website does not imply support for installing extensions in mobile Chrome. Only the top-level page is covered.
 
+## Project layout
+
+```text
+extension/            Load this folder in Chrome; package its contents
+  manifest.json
+  content/            YouTube blocking logic and styles
+  popup/              Settings popup HTML, styles, and logic
+  icons/              Chrome-sized PNG icons
+test/                 Regression tests
+docs/
+  CONTRIBUTING.md     Contribution guide and manual test checklist
+  design/             Original icon and generation notes
+README.md
+LICENSE
+package.json
+package-lock.json
+```
+
 ## Development
 
 The unpacked extension needs no build step. For regression tests, install Node.js 18 or newer and run:
@@ -42,11 +62,11 @@ npm ci
 npm test
 ```
 
-Tests use jsdom to exercise DOM behavior; they do not replace live browser checks. See [CONTRIBUTING.md](CONTRIBUTING.md) for the manual checklist.
+Tests use jsdom to exercise DOM behavior; they do not replace live browser checks. See [contribution guide](docs/CONTRIBUTING.md) for the manual checklist.
 
 ## Distribution
 
-For Chrome Web Store submission, create a ZIP with `manifest.json`, `content.js`, and `content.css`, `popup.html`, `popup.css`, and `popup.js` at its root, and the `icons/` directory (only `icon-*.png` is required). Exclude development dependencies, tests, and private keys. See [Chrome’s publishing documentation](https://developer.chrome.com/docs/webstore/publish/).
+For Chrome Web Store submission, ZIP the **contents** of `extension/` so `manifest.json` is at the ZIP root. Preserve the `content/`, `popup/`, and `icons/` subfolders. Everything needed at runtime lives there; tests, design sources, and development dependencies stay outside the package. See [Chrome’s publishing documentation](https://developer.chrome.com/docs/webstore/publish/).
 
 Chrome’s **Pack extension** workflow creates a `.crx` and a private `.pem` signing key. Keep that key private and outside the repository.
 

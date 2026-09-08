@@ -6,7 +6,7 @@ Run `npm ci` and `npm test` before submitting a change.
 
 ## Manual browser checklist
 
-Load the unpacked extension and check:
+Load the `extension/` folder as an unpacked extension and check:
 
 - Home, search, subscriptions, channels, and watch-page recommendations.
 - Direct `/shorts/VIDEO_ID` navigation and channel Shorts tabs.

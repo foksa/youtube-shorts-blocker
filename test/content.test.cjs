@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { JSDOM } = require('jsdom');
-const script = fs.readFileSync('content.js', 'utf8');
+const script = fs.readFileSync('extension/content/content.js', 'utf8');
 const blocked = '[data-yt-shorts-blocked]';
 async function page(html, path = '/') {
   const dom = new JSDOM(html, { url: `https://www.youtube.com${path}`, runScripts: 'outside-only', pretendToBeVisual: true });
@@ -144,11 +144,11 @@ test('a stale initial storage read cannot override a newer preference', async ()
   assert.equal(calls.length,0);
 });
 test('popup loads, saves, and restores the toggle after a write failure', async () => {
-  const dom = new JSDOM(fs.readFileSync('popup.html','utf8'),{runScripts:'outside-only'});
+  const dom = new JSDOM(fs.readFileSync('extension/popup/popup.html','utf8'),{runScripts:'outside-only'});
   try {
     const writes=[]; let fail=false;
     dom.window.chrome={storage:{local:{get:async()=>({redirectShorts:false}),set:async value=>{if(fail)throw Error('test');writes.push(value.redirectShorts);}}}};
-    dom.window.eval(fs.readFileSync('popup.js','utf8'));
+    dom.window.eval(fs.readFileSync('extension/popup/popup.js','utf8'));
     await settle();
     const toggle=dom.window.document.querySelector('input');
     assert.equal(toggle.checked,false); assert.equal(toggle.disabled,false);
