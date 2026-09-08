@@ -32,3 +32,19 @@ for this extension at chrome://extensions and refresh YouTube.
 Project: https://github.com/foksa/youtube-shorts-blocker
 """)
 print(f"Packaged v{version}: {output}")
+
+# Fail the build before publication if any runtime asset is missing or corrupt.
+with ZipFile(output) as archive:
+    if archive.testzip() is not None:
+        raise SystemExit("ZIP integrity check failed")
+    manifest = json.loads(archive.read("manifest.json"))
+    required = ["LICENSE", "INSTALL.txt", manifest["action"]["default_popup"]]
+    required.extend(manifest["icons"].values())
+    required.extend(manifest["action"]["default_icon"].values())
+    for content in manifest["content_scripts"]:
+        required.extend(content.get("js", []))
+        required.extend(content.get("css", []))
+    for asset in required:
+        if asset not in archive.namelist():
+            raise SystemExit(f"Missing runtime asset: {asset}")
+print("ZIP integrity and manifest references verified.")

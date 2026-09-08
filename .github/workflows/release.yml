@@ -1,0 +1,68 @@
+name: Test and release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check release version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          tag = os.environ['GITHUB_REF_NAME']
+          version = json.loads(Path('extension/manifest.json').read_text())['version']
+          package = json.loads(Path('package.json').read_text())['version']
+          if not re.fullmatch(r'v\d+\.\d+\.\d+', tag) or tag != f'v{version}' or package != version:
+              raise SystemExit('Tag must be vX.Y.Z and match manifest.json and package.json versions.')
+          PY
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Build and validate ZIP
+        run: python3 scripts/package.py
+
+  publish:
+    needs: test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 scripts/package.py
+      - name: Publish release with ZIP
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" dist/youtube-shorts-blocker.zip \
+            --verify-tag \
+            --title "YouTube Shorts Blocker $RELEASE_TAG" \
+            --generate-notes \
+            --notes-file .github/release-notes.md
