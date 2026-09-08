@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Shorts Blocker",
+  "short_name": "Shorts Blocker",
+  "version": "1.0.1",
+  "description": "Blocks YouTube Shorts across the homepage, search results, sidebars, and direct Shorts pages.",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "YouTube Shorts Blocker",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

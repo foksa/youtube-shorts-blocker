@@ -1,0 +1,12 @@
+{
+  "name": "youtube-shorts-blocker",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  },
+  "license": "MIT"
+}

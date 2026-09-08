@@ -1,0 +1,10 @@
+/* Only dedicated Shorts renderers are safe to hide before URL inspection. */
+[data-yt-shorts-blocked],
+ytd-rich-shelf-renderer[is-shorts],
+ytd-reel-shelf-renderer,
+ytm-reel-shelf-renderer,
+ytd-reel-item-renderer,
+ytm-shorts-lockup-view-model,
+ytm-shorts-lockup-view-model-v2 {
+  display: none !important;
+}
