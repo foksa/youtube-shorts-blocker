@@ -4,16 +4,23 @@ A lightweight Manifest V3 Chrome extension that hides YouTube Shorts cards, shel
 
 No runtime dependencies, accounts, telemetry, or network requests. The extension runs only on `www.youtube.com` and `m.youtube.com` and uses the storage permission only to remember your preference locally.
 
-## Install locally
+## Download and install
 
-1. Download or clone this repository and extract it if needed.
-2. Open `chrome://extensions` and enable **Developer mode**.
-3. Click **Load unpacked** and select the `extension/` folder inside the repository.
-4. Refresh existing YouTube tabs.
+**[Download the extension ZIP](https://github.com/foksa/youtube-shorts-blocker/releases/latest/download/youtube-shorts-blocker.zip)** — no Git or build tools needed.
 
-If you previously loaded the repository root, remove that unpacked installation and load `extension/` instead. Chrome may assign a new extension ID, so check your redirect preference afterward.
+1. Extract the ZIP into a folder you will keep, such as `Documents/YouTube Shorts Blocker`.
+2. In Chrome, open `chrome://extensions`.
+3. Turn on **Developer mode** in the upper-right corner.
+4. Click **Load unpacked** and select the extracted folder containing `manifest.json`.
+5. Refresh any open YouTube tabs.
 
-After changing extension files, reload the extension on `chrome://extensions` and refresh YouTube.
+Keep the extracted folder in place—Chrome loads the extension from it. The ZIP is a manual installation, so Developer mode is required.
+
+To open settings, click Chrome’s puzzle-piece **Extensions** button, then **YouTube Shorts Blocker**. You can pin it for easier access.
+
+### Updating
+
+Download the latest ZIP, extract it, and replace the contents of your existing extension folder. Click **Reload** for the extension on `chrome://extensions`, then refresh YouTube. Updates are manual.
 
 ## Redirect preference
 
@@ -38,12 +45,13 @@ This hides Shorts UI and redirects Shorts routes. It does not classify video dur
 ## Project layout
 
 ```text
-extension/            Load this folder in Chrome; package its contents
+extension/            Unpacked extension for developers
   manifest.json
   content/            YouTube blocking logic and styles
   popup/              Settings popup HTML, styles, and logic
   icons/              Chrome-sized PNG icons
 test/                 Regression tests
+scripts/              Release packaging helper
 docs/
   CONTRIBUTING.md     Contribution guide and manual test checklist
   design/             Original icon and generation notes
@@ -55,7 +63,7 @@ package-lock.json
 
 ## Development
 
-The unpacked extension needs no build step. For regression tests, install Node.js 18 or newer and run:
+To work from source, load the repository’s `extension/` folder in Chrome. The unpacked extension needs no build step. For regression tests, install Node.js 18 or newer and run:
 
 ```sh
 npm ci
@@ -63,12 +71,6 @@ npm test
 ```
 
 Tests use jsdom to exercise DOM behavior; they do not replace live browser checks. See [contribution guide](docs/CONTRIBUTING.md) for the manual checklist.
-
-## Distribution
-
-For Chrome Web Store submission, ZIP the **contents** of `extension/` so `manifest.json` is at the ZIP root. Preserve the `content/`, `popup/`, and `icons/` subfolders. Everything needed at runtime lives there; tests, design sources, and development dependencies stay outside the package. See [Chrome’s publishing documentation](https://developer.chrome.com/docs/webstore/publish/).
-
-Chrome’s **Pack extension** workflow creates a `.crx` and a private `.pem` signing key. Keep that key private and outside the repository.
 
 ## Privacy
 

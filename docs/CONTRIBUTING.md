@@ -19,3 +19,7 @@ Load the `extension/` folder as an unpacked extension and check:
 ## Reporting a problem
 
 Include browser and extension versions, page URL (remove private query data), locale, whether you were signed in, expected behavior, and reproduction steps. A small HTML excerpt around the affected card or control helps; remove personal information before sharing.
+
+## Building a release archive
+
+Run `python3 scripts/package.py` from the repository root (Python 3 required). It writes `dist/youtube-shorts-blocker.zip` containing the runtime files, license, and installation instructions. Upload that file to a GitHub release; keep the asset name stable so the README’s latest-release download link continues to work.
